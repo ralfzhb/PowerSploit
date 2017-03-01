@@ -13,7 +13,6 @@ function Invoke-CredentialInjection
     License: BSD 3-Clause
     Required Dependencies: None
     Optional Dependencies: None
-    Version: 1.1
 
     .DESCRIPTION
 
@@ -772,7 +771,7 @@ function Invoke-CredentialInjection
 		    $Win32Functions | Add-Member NoteProperty -Name GetModuleHandle -Value $GetModuleHandle
 		
 		    $FreeLibraryAddr = Get-ProcAddress kernel32.dll FreeLibrary
-		    $FreeLibraryDelegate = Get-DelegateType @([Bool]) ([IntPtr])
+		    $FreeLibraryDelegate = Get-DelegateType @([IntPtr]) ([Bool])
 		    $FreeLibrary = [System.Runtime.InteropServices.Marshal]::GetDelegateForFunctionPointer($FreeLibraryAddr, $FreeLibraryDelegate)
 		    $Win32Functions | Add-Member -MemberType NoteProperty -Name FreeLibrary -Value $FreeLibrary
 		

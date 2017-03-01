@@ -25,8 +25,6 @@ Contributors: This script has a byte array hardcoded, which contains a DLL wich 
 License: GPLv3 or later
 Required Dependencies: None
 Optional Dependencies: None
-Version: 1.1
-ReflectivePEInjection version: 1.1
 
 .DESCRIPTION
 
@@ -574,7 +572,7 @@ $RemoteScriptBlock = {
 		$Win32Functions | Add-Member NoteProperty -Name GetModuleHandle -Value $GetModuleHandle
 		
 		$FreeLibraryAddr = Get-ProcAddress kernel32.dll FreeLibrary
-		$FreeLibraryDelegate = Get-DelegateType @([Bool]) ([IntPtr])
+		$FreeLibraryDelegate = Get-DelegateType @([IntPtr]) ([Bool])
 		$FreeLibrary = [System.Runtime.InteropServices.Marshal]::GetDelegateForFunctionPointer($FreeLibraryAddr, $FreeLibraryDelegate)
 		$Win32Functions | Add-Member -MemberType NoteProperty -Name FreeLibrary -Value $FreeLibrary
 		
@@ -818,24 +816,12 @@ $RemoteScriptBlock = {
 		[IntPtr]
 		$StartAddress,
 		
-		[Parameter(ParameterSetName = "EndAddress", Position = 3, Mandatory = $true)]
-		[IntPtr]
-		$EndAddress,
-		
 		[Parameter(ParameterSetName = "Size", Position = 3, Mandatory = $true)]
 		[IntPtr]
 		$Size
 		)
 		
-		[IntPtr]$FinalEndAddress = [IntPtr]::Zero
-		if ($PsCmdlet.ParameterSetName -eq "Size")
-		{
-			[IntPtr]$FinalEndAddress = [IntPtr](Add-SignedIntAsUnsigned ($StartAddress) ($Size))
-		}
-		else
-		{
-			$FinalEndAddress = $EndAddress
-		}
+	    [IntPtr]$FinalEndAddress = [IntPtr](Add-SignedIntAsUnsigned ($StartAddress) ($Size))
 		
 		$PEEndAddress = $PEInfo.EndAddress
 		
